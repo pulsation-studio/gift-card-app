@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <link rel="preconnect" href="https://fonts.bunny.net" />
+    <link
+      href="https://fonts.bunny.net/css?family=instrument-sans:400,400i,500,500i,600,600i,700,700i"
+      rel="stylesheet"
+    />
+    <style>
+      .network-button {
+        background-color: #41b6ac;
+      }
+      
+      .invoice-button {
+        background-color: #F8B042;
+      }
+      
+      .custom-button {
+        display: inline-block;
+        color: white;
+        text-align: center;
+        text-decoration: none !important;
+        font-size: 14px;
+        font-weight: bold;
+        padding: 20px 20px;
+        border-radius: 50px;
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+        border: 2px solid white;
+      }
+    </style>
+
+  </head>
+
+  <body class="min-h-screen w-screen font-sans">
+    <p>
+      Bonjour,
+    </p>
+    <p>
+      Félicitations pour votre achat! 🎉
+    </p>
+    <p>
+      Retrouvez la carte-cadeau en pièce jointe, prête à être utilisée dans le réseau des partenaires Pulsation.
+    </p>
+    <p>
+    </p>
+    <p>
+      Choisir Pulsation, ce n'est pas seulement faire plaisir à quelqu’un, c'est contribuer à une économie locale durable et solidaire !
+    </p>
+    <p>
+      Chaque euro dépensé soutient des créateurs passionnés, des petits commerces et des producteurs qui travaillent chaque jour pour un monde plus responsable.
+    </p>
+    <p>
+    </p>
+    <p>
+      Alors pour cela on vous dit MERCI et bienvenue dans la communauté des consom'acteurs {{ settings.global.name }} 😊
+    </p>
+    <p>
+    </p>
+    <p>
+      Envie d'aller plus loin ?
+    </p>
+    <p>
+      Ne ratez aucune info de l'association en nous rejoignant sur <a href="{{ settings.global.instagramLink }}" target="blank">Instagram</a>, ou en vous inscrivant à la <a href="{{ settings.global.newsLetterLink }}" target="blank">Newsletter</a>.
+    </p>
+    <p>
+    </p>
+    <p>
+      A Très bientôt !
+    </p>
+    <p>
+    </p>
+    <p>
+      L'équipe Pulsation
+    </p>
+    <a
+      href="https://pulsation.eco/"
+      class="network-button custom-button"
+    >
+      Découvrez le Réseau
+</a>
+    @if(invoice)
+      <a href="{{ invoice.invoiceUrl }}" class="invoice-button custom-button">
+        Accéder à ma facture
+</a>
+    @endif
+  </body>
+
+</html>
