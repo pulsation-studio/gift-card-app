@@ -1,39 +1,42 @@
-# Gift Card App Documentation
+# Documentation de l'application de cartes cadeaux
 
-## Table of Contents
+## Table des matières
 
 1. [Introduction](#introduction)
 2. [Installation](#installation)
 3. [Configuration](#configuration)
-   - [Environment Variables](#environment-variables)
-   - [Configuration File](#configuration-file)
-   - [Gift Card template](#gift-card-template)
-4. [Usage](#usage)
-   - [Starting the Server](#starting-the-server)
-   - [Accessing the Interface](#accessing-the-interface)
-5. [Features](#features)
-   - [Guest](#gift-cardpurchase)
-   - [Partner](#partner)
-   - [Admin panel](#admin)
+   - [Variables d’environnement](#variables-denvironnement)
+   - [Fichier de configuration](#fichier-de-configuration)
+   - [Template de carte cadeau](#template-de-carte-cadeau)
+4. [Utilisation](#utilisation)
+   - [Démarrer le serveur](#démarrer-le-serveur)
+   - [Accéder à l’interface](#accéder-à-linterface)
+5. [Fonctionnalités](#fonctionnalités)
+   - [Invité](#gift-cardpurchase)
+   - [Partenaire](#partner)
+   - [Panneau d’administration](#admin)
    - [API](#api)
-6. [Techs we used](#techs-we-used)
-   - [Pdf generation](#pdf-generation)
-   - [Payment solution](#payment-solution)
-   - [Back-end solution](#back-end-solution)
-   - [Front-end solution](#front-end-solution)
-7. [Commands in terminal](#commands-in-terminal)
-8. [Contributing](#contributing)
-9. [License](#license)
+6. [Technologies utilisées](#technologies-utilisées)
+   - [Génération de PDF](#génération-de-pdf)
+   - [Solution de paiement](#solution-de-paiement)
+   - [Backend](#backend)
+   - [Frontend](#frontend)
+7. [Commandes terminal](#commandes-terminal)
+8. [Contribuer](#contribuer)
+9. [Licence](#licence)
 
 ---
 
+[Link to english version of this ReadME](ReadME.en.md)
+
 ## Introduction
 
-Welcome to the documentation for **Gift Card App**. This project aims to provide an ergonomic and easy-to-use solution for managing a gift card system, from purchase to redemption.
+Bienvenue dans la documentation de **Gift Card App**.  
+Ce projet vise à offrir une solution ergonomique et facile d’utilisation pour gérer un système de cartes cadeaux, de l’achat à l’utilisation.
 
 ## Installation
 
-To install the project, use the following commands (you will need Docker on your machine):
+Pour installer le projet, utilisez les commandes suivantes (vous aurez besoin de Docker sur votre machine) :
 
 ```sh
 docker compose -f docker-compose.local.yml up -d
@@ -44,109 +47,123 @@ node ace migration:run
 
 ## Configuration
 
-#### Environment Variables
+#### Variables d’environnement
 
-The list of needed environment variables are available in the **.env.example** :
+La liste des variables d’environnement nécessaires est disponible dans le fichier **.env.example** :
 
-- **HOST/PORT**: host and port of your app
-- **NODE_ENV**: development in local, production when deployed
-- **DB_HOST/PORT/USER/PASSWORD/DATABASE**: db credentials
-- **STRIPE_PUBLIC_KEY/SECRET_KEY/WEBHOOK_SECRET_KEY**: Stripe credentials (if you are using the default payment service)
-- **SMTP_HOST/PORT/USERNAME/PASSWORD**: mailer credentials
-- **VITE_APP_NAME**: Title of your app in browser tabs
-- **SENTRY_DSN**: Url to log errors to Sentry (optional)
+- **HOST/PORT** : hôte et port de votre application
+- **NODE_ENV** : `development` en local, `production` en production
+- **DB_HOST/PORT/USER/PASSWORD/DATABASE** : identifiants de la base de données
+- **STRIPE_PUBLIC_KEY/SECRET_KEY/WEBHOOK_SECRET_KEY** : clés Stripe (si vous utilisez le service de paiement par défaut)
+- **SMTP_HOST/PORT/USERNAME/PASSWORD** : identifiants pour l’envoi d’emails
+- **VITE_APP_NAME** : titre de votre application affiché dans l’onglet du navigateur
+- **SENTRY_DSN** : URL pour enregistrer les erreurs sur Sentry (optionnel)
 
-#### Gift Card template
+#### Template de carte cadeau
 
-A default template is available in public/templates. We currently use [Carbone](https://carbone.io/) to generate gift card PDFs, but you can change the technology by creating your own generation service and setting it as the default PDF generation service in providers/app_provider.ts .
+Un template par défaut est disponible dans le dossier `public/templates`.  
+Nous utilisons actuellement [Carbone](https://carbone.io/) pour générer les PDF des cartes cadeaux, mais vous pouvez remplacer cette technologie en créant votre propre service de génération de PDF et en le définissant comme service par défaut dans `providers/app_provider.ts`.
 
-#### Configuration File
+#### Fichier de configuration
 
-Modify the `config/settings.ts` file to include your own app configuration.
+Modifiez le fichier `config/settings.ts` pour inclure la configuration spécifique à votre application.
 
-## Usage
+## Utilisation
 
-#### Starting the Server
+#### Démarrer le serveur
 
-To start the development server, run:
+Pour lancer le serveur en mode développement, exécutez :
 
 ```sh
 npm run server
 ```
 
-#### Accessing the Interface
+#### Accéder à l’interface
 
-During your first login, you will need to create a store.
-To create this store, you can access the admin panel by creating an administrator from the terminal (see the [Commands](#commands) section).
+Lors de votre première connexion, vous devrez créer une boutique.  
+Pour cela, accédez au panneau d’administration en créant un administrateur via le terminal (voir la section [Commandes](#commandes-terminal)).
 
-After creating this administrator, go to the admin console at /admin. Navigate to "Boutiques" and create a store.
+Une fois l’administrateur créé, accédez à la console d’administration à l’adresse `/admin`.  
+Rendez-vous dans l’onglet **"Boutiques"** pour créer une boutique.
 
-Once the store is created, you can create a partner in the "Partenaires" section.
-Your partner must have an email address that belongs to you in order to receive the password creation email.
-You can then log in as a partner (after logging out from the admin space) at /partner.
+Une fois la boutique créée, vous pouvez ajouter un partenaire depuis la section **"Partenaires"**.  
+Ce partenaire doit disposer d’une adresse email vous appartenant pour recevoir l’email de création de mot de passe.  
+Vous pouvez ensuite vous connecter en tant que partenaire (après vous être déconnecté de l’espace admin) à l’adresse `/partner`.
 
-To test the partner functionality for gift cards, you can go to /gift-card/purchase to make a test purchase and receive it via email, or create one in the admin panel.
+Pour tester le fonctionnement des cartes cadeaux côté partenaire, vous pouvez vous rendre sur `/gift-card/purchase` pour effectuer un achat test et le recevoir par email, ou en créer une depuis le panneau d’administration.
 
-## Features
+## Fonctionnalités
 
-#### /gift-card/purchase
+#### `/gift-card/purchase`
 
-This is where customers can purchase gift cards.
+C’est ici que les clients peuvent acheter des cartes cadeaux.
 
-#### /partner
+#### `/partner`
 
-The **/partner** path provides access to the partner dashboard, which includes:
+Le chemin **/partner** donne accès au tableau de bord partenaire, qui comprend :
 
-- Home: Overview of gift card activity.
-- Shop: View your store, your team, and all gift card transactions related to your store.
-- Account: View your account information, update your password, and log out.
+- **Accueil** : vue d’ensemble de l’activité des cartes cadeaux
+- **Boutique** : consulter votre boutique, votre équipe, ainsi que toutes les transactions liées aux cartes cadeaux
+- **Compte** : consulter vos informations, modifier votre mot de passe, et vous déconnecter
 
-#### /admin
+#### `/admin`
 
-The **/admin** path provides access to the admin panel, which includes:
+Le chemin **/admin** donne accès au panneau d’administration, qui permet de :
 
-- **Partners**: List/Create/Update
-- **Gift cards**: List/Create/Update/Send via email
-- **Shops**: List/Create/Update
-- **Transactions**: List
-- **Admins**: List/Send password reset email
-  You can implement your own configuration in the /config/admin folder
+- **Partenaires** : lister / créer / modifier
+- **Cartes cadeaux** : lister / créer / modifier / envoyer par email
+- **Boutiques** : lister / créer / modifier
+- **Transactions** : lister
+- **Administrateurs** : lister / envoyer un email de réinitialisation de mot de passe
+
+Vous pouvez personnaliser la configuration dans le dossier `/config/admin`.
 
 #### API
 
-The API provides endpoints to receive the payment status of the order, and to send gift cards via email. By default, the implemented payment service is Stripe, but you can use any service of your choice by creating your own service and defining it as the payment service in `providers/app_provider`.
+L’API fournit des endpoints pour recevoir le statut de paiement d’une commande et pour envoyer des cartes cadeaux par email.  
+Par défaut, le service de paiement intégré est Stripe, mais vous pouvez utiliser n’importe quel autre service en créant le vôtre et en le définissant comme service par défaut dans `providers/app_provider`.
 
-## Techs we used
+## Technologies utilisées
 
-#### Pdf generation
+#### Génération de PDF
 
-We used [Carbone.io](https://carbone.io) to generate PDF gift cards in our application. Carbone is a powerful template-based document generator that takes JSON data and injects it into templates to create PDFs, DOCX, and more. It’s fast, flexible, and ideal for generating dynamic and styled documents.
+Nous utilisons [Carbone.io](https://carbone.io) pour générer les cartes cadeaux PDF dans notre application.  
+Carbone est un puissant moteur de génération de documents basé sur des templates. Il prend des données JSON et les insère dans des modèles pour produire des fichiers PDF, DOCX, etc.  
+C’est rapide, flexible, et idéal pour générer des documents dynamiques et stylisés.
 
-#### Payment solution
+#### Solution de paiement
 
-We used [Stripe](https://stripe.com) to handle payments in our application. Stripe is a powerful and secure payment platform that supports a wide range of payment methods. Its developer-friendly API, extensive documentation, and built-in support for webhooks make it easy to integrate and manage transactions, subscriptions, and payouts with reliability and flexibility.
+Nous utilisons [Stripe](https://stripe.com) pour gérer les paiements dans notre application.  
+Stripe est une plateforme de paiement puissante et sécurisée qui prend en charge un large éventail de moyens de paiement.  
+Son API conviviale, sa documentation complète et sa prise en charge des webhooks permettent une intégration simple et une gestion fiable des transactions, abonnements et paiements.
 
-#### Back-end solution
+#### Solution back-end
 
-We used AdonisJS to build the backend of our application. It’s a full-stack Node.js framework that offers a clean, structured approach to web development. With built-in routing, authentication, and ORM, plus TypeScript support, AdonisJS ensures productivity, and stability.
+Nous avons utilisé **AdonisJS** pour développer le back-end de notre application.  
+C’est un framework Node.js full-stack qui offre une architecture claire et structurée.  
+Avec le routage, l’authentification et l’ORM intégrés, ainsi que le support TypeScript, AdonisJS garantit productivité et stabilité.
 
-#### Front-end solution
+#### Solution front-end
 
-We used Mantine to build the frontend of our application. Mantine is a modern React component library that offers a rich set of accessible, customizable UI elements. With built-in hooks, dark mode support, and responsive components, it allows fast and consistent interface development while maintaining a clean and developer-friendly experience.
+Nous avons utilisé **Mantine** pour construire le front-end de notre application.  
+Mantine est une bibliothèque moderne de composants React offrant un ensemble riche d’éléments UI accessibles et personnalisables.  
+Grâce à ses hooks intégrés, son support du mode sombre et ses composants responsives, elle permet un développement rapide, cohérent et agréable.
 
-## Commands in terminal
+## Commandes terminal
 
-Create an admin: `node ace admin:create`
-Reset an admin password (when you cant access to the admin console): `node ace admin:reset_password`
+Créer un administrateur : `node ace admin:create`
+Réinitialiser un mot de passe admin (quand vous ne pouvez pas accéder à l'espace administrateur): `node ace admin:reset_password`
 
-## Contributing
+## Contribuer
 
-We welcome contributions! Please read our [contributing guidelines](CONTRIBUTING.md) to get started.
+Les contributions sont les bienvenues !  
+Veuillez lire notre fichier [CONTRIBUTING.md](CONTRIBUTING.md) pour commencer.
 
-## License
+## Licence
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+Ce projet est sous licence MIT.  
+Consultez le fichier [LICENSE](LICENSE) pour plus de détails.
 
 ---
 
-For more detailed information, please refer to the project's [GitHub repository](https://github.com/pulsation-studio/gift-card-app).
+Pour plus d'informations, veuillez consulter le [dépôt GitHub du projet](https://github.com/pulsation-studio/gift-card-app).
